@@ -1,8 +1,7 @@
 const containerVideos = document.querySelector(".videos__container");
 
-async function buscarEMostrarVideos(){
-
-    try{
+async function buscarEMostrarVideos() {
+    try {
         const busca = await fetch("http://localhost:3000/videos");
         const videos = await busca.json();
 
@@ -21,7 +20,7 @@ async function buscarEMostrarVideos(){
             </li>
             `;
         })
-    } catch (error){
+    } catch (error) {
         containerVideos.innerHTML = `<p>Houve um erro ao carregar os vídeos:${error}</p>`
     } finally {
         // Apenas para fonte de pesquisa
@@ -29,3 +28,24 @@ async function buscarEMostrarVideos(){
 }
 
 buscarEMostrarVideos();
+
+const barraDePesquisa = document.querySelector(".pesquisar__input");
+barraDePesquisa.addEventListener("input", filtrarPesquisa);
+
+function filtrarPesquisa() {
+    const videos = document.querySelectorAll(".videos__item");
+
+    if (barraDePesquisa.value == "") {
+        return;
+    } else {
+        for (let video of videos) {
+            let titulo = video.querySelector(".titulo-video").textContent.toLowerCase();
+            let valorFiltro = barraDePesquisa.value.toLowerCase();
+
+            if (!titulo.includes(valorFiltro)) 
+                video.style.display = "none";
+             else 
+                video.style.display = "block"; 
+        }
+    }
+}
